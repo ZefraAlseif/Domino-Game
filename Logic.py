@@ -44,6 +44,25 @@ class Logic:
             turn = 0 
         return turn
     
+    # Check if Player has a domino that can be played:
+    def can_move(player_dominos,current_turn,table):
+        check = False
+        table_lft = table[0]
+        table_rht = table[-1]
+        for i in range (1,len(player_dominos[current_turn])):
+            temp_domino = player_dominos[current_turn][i]
+            print("Temp Domino: "+temp_domino)
+            print("Table lft: "+table_lft[0])
+            print("Table right: "+table_rht[-1])
+            if temp_domino.find(table_lft[0]) != -1 or temp_domino.find(table_rht[-1]) != -1:
+                check = True
+                break
+        return check     
+    
+    # Check if the move made is a valid move via domino rules
+    def valid_move(table,chosen_dominom,chosen_side):
+        
+        pass
     # Making a move (Player Move)
     def make_move(player_dominos,current_turn,table):
         print("Current Table: \n", table)
@@ -51,7 +70,7 @@ class Logic:
         chosen_side = input("Choose which side (Left or Right *Beginning does not Matter): \n")
         player_dominos[current_turn].remove(chosen_domino)
         return chosen_domino,chosen_side
-    
+    # Update the playing table with the most recent move
     def update_table(table,chosen_domino,chosen_side):
         if chosen_side == "Left" or table == []:
             table.insert(0,chosen_domino)
@@ -66,9 +85,22 @@ class Logic:
     pd = pick_dominos(sp, ap)  # each player dominos reference
     turn = 0
     print(pd)
-    can_move = True
-    while (can_move):
-        chosen_domino, chosen_side = make_move(pd,turn,table)
-        update_table(table,chosen_domino,chosen_side)
-        turn = next_turn(turn)
+    cm = True
+    count = 0;
+    while (count < 4):
+        if table != []:
+            check_move = can_move(pd,turn,table)
+        else:
+            check_move = True 
+        if check_move:       
+            chosen_domino, chosen_side = make_move(pd,turn,table)
+            update_table(table,chosen_domino,chosen_side)
+            turn = next_turn(turn)
+            count = 0
+        else: 
+            print("Skipped turn of: ",pd[turn][0])
+            turn = next_turn(turn)
+            count +=1
+            
+        
         
