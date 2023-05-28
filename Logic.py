@@ -1,39 +1,74 @@
 import random
+
+
 class Logic:
-    
-    def __init__(number_players) -> None:
+    # Builds the number of players list (Human Players & Computer players) total of 4
+    def players(number_players):
         active_players = []
-        for i in range(1,number_players):
-            active_players.append([f'Player {i}'])
-        for i in range(4-number_players,4):
-            active_players.append([f'Computer Player {i}'])
+        for i in range(1, number_players):
+            active_players.append([f"Player {i}"])
+        for i in range(number_players, 5):
+            active_players.append([f"Computer Player {i}"])
         return active_players
-    
+
     # Builds the starting pile & randomizes it
     def build_pile():
         start_pile = []
-        for i in range(0,10): # 6 set range to range(0,7)
-            for j in range (i,10): # 6 set range to range(i,7)
-                start_pile.append(f'{i}-{j}')
+        for i in range(0, 10):  # 6 set range to range(0,7)
+            for j in range(i, 10):  # 6 set range to range(i,7)
+                start_pile.append(f"{i}-{j}")
         random.shuffle(start_pile)
         return start_pile
-    
+
     # Pick the dominos for each player
-    def pick_dominos(start_pile,active_players):
+    def pick_dominos(start_pile, active_players):
         for i in active_players:
-            for j in range(0,10):
+            for j in range(0, 10):
                 temp_domino = start_pile.pop()
                 i.append(temp_domino)
+        """dict_players = {
+            active_players[0][0]: active_players[0][1:],
+            active_players[1][0]: active_players[1][1:],
+            active_players[2][0]: active_players[2][1:],
+            active_players[3][0]: active_players[3][1:],
+        }"""
         return active_players
-    
-    def make_move():
-        
-        pass
-    
-    sp = build_pile()
-    print(sp)
-    ap = __init__(random.randint(1,4))
-    print(ap)
-    print(pick_dominos(sp,ap))
-    
 
+    """
+    For now the game will start with Player 1 and will progress towards the last player on the list and the loop again.
+    """
+    def next_turn(turn):
+        if turn < 3:
+            turn += 1
+        else:
+            turn = 0 
+        return turn
+    
+    # Making a move (Player Move)
+    def make_move(player_dominos,current_turn,table):
+        print("Current Table: \n", table)
+        chosen_domino = input(f"Choose Domino (Ex. 1-2): {player_dominos[current_turn][1:]}\n")
+        chosen_side = input("Choose which side (Left or Right *Beginning does not Matter): \n")
+        player_dominos[current_turn].remove(chosen_domino)
+        return chosen_domino,chosen_side
+    
+    def update_table(table,chosen_domino,chosen_side):
+        if chosen_side == "Left" or table == []:
+            table.insert(0,chosen_domino)
+        else:
+            table.insert(len(table),chosen_domino)
+    # Temporary game run
+    table = []
+    sp = build_pile()  # starting pile reference
+    print(sp)
+    ap = players(random.randint(2, 4))  # active player reference
+    print(ap)
+    pd = pick_dominos(sp, ap)  # each player dominos reference
+    turn = 0
+    print(pd)
+    can_move = True
+    while (can_move):
+        chosen_domino, chosen_side = make_move(pd,turn,table)
+        update_table(table,chosen_domino,chosen_side)
+        turn = next_turn(turn)
+        
