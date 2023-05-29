@@ -21,9 +21,9 @@ Domino Game will allow players to play the board game of the same name: for this
     - Updates the corresponding table or status of the game by inserting the chosen_domino in the side that it was chosen.
 
  * Things that need to be added:
-    > (0) Match the dominos played i.e '2-3' '3-4' not '2-3' '4-3' 
-    > (1) Check if any of the dominos the current player has is playable [Pending]
-    > (2) Check if the domino and side the player chose equate to a correct value [Pending]
+    > (0) Match the dominos played i.e '2-3' '3-4' not '2-3' '4-3' [Completed]
+    > (1) Check if any of the dominos the current player has is playable [Completed]
+    > (2) Check if the domino and side the player chose equate to a correct value [Completed]
     > (3) End the game when no player has a domino to play or someone has ran out of dominos [Pending]
 
 

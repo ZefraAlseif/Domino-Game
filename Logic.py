@@ -58,45 +58,67 @@ class Logic:
                 check = True
                 break
         return check     
-    
+
     # Check if the move made is a valid move via domino rules
-    def valid_move(table,chosen_dominom,chosen_side):
-        
-        pass
+    def valid_move(table,chosen_domino,chosen_side):
+        if chosen_side == "L" and chosen_domino[-1] == table[0][0]:
+            return chosen_domino, chosen_side
+        elif chosen_side == "L" and chosen_domino[0] == table[0][0]:
+            chosen_domino = str(chosen_domino[-1]+"-"+chosen_domino[0])
+            return chosen_domino,chosen_side
+        elif chosen_side == "R" and chosen_domino[0] == table[-1][-1]:
+            return chosen_domino, chosen_side
+        elif chosen_side == "R" and chosen_domino[-1] == table[-1][-1]:
+            chosen_domino = str(chosen_domino[-1]+"-"+chosen_domino[0])
+            return chosen_domino, chosen_side
+        else:
+            return "F","F"
+    
     # Making a move (Player Move)
     def make_move(player_dominos,current_turn,table):
         print("Current Table: \n", table)
         chosen_domino = input(f"Choose Domino (Ex. 1-2): {player_dominos[current_turn][1:]}\n")
-        chosen_side = input("Choose which side (Left or Right *Beginning does not Matter): \n")
-        player_dominos[current_turn].remove(chosen_domino)
+        chosen_side = input("Choose which side (L or R *Beginning does not Matter): \n")
+        chosen_side = chosen_side.capitalize()
         return chosen_domino,chosen_side
+    
     # Update the playing table with the most recent move
     def update_table(table,chosen_domino,chosen_side):
-        if chosen_side == "Left" or table == []:
+        if chosen_side == "L" or table == []:
             table.insert(0,chosen_domino)
         else:
             table.insert(len(table),chosen_domino)
-    # Temporary game run
+    
+    # *Temporary game run 
     table = []
     sp = build_pile()  # starting pile reference
-    print(sp)
+    #print(sp)
     ap = players(random.randint(2, 4))  # active player reference
-    print(ap)
+    #print(ap)
     pd = pick_dominos(sp, ap)  # each player dominos reference
-    turn = 0
-    print(pd)
-    cm = True
-    count = 0;
+    turn = 0 # Starting player turn
+    #print(pd)
+    count = 0; # Determine how many players where skipped
     while (count < 4):
-        if table != []:
-            check_move = can_move(pd,turn,table)
+        if table != []: # Check if the game is not at the starting position
+            check_move = can_move(pd,turn,table) # Check if the player can make a move
         else:
             check_move = True 
-        if check_move:       
-            chosen_domino, chosen_side = make_move(pd,turn,table)
-            update_table(table,chosen_domino,chosen_side)
-            turn = next_turn(turn)
-            count = 0
+        if check_move and table == []:       
+            chosen_domino, chosen_side = make_move(pd,turn,table) # Allow the user to choose the domino 
+            update_table(table,chosen_domino,chosen_side) # Update the table
+            turn = next_turn(turn) # Go to the next turn
+            count = 0 
+        elif check_move:
+            chosen_domino, chosen_side = make_move(pd,turn,table) 
+            correct_domino, correct_side = valid_move(table,chosen_domino,chosen_side)
+            if correct_domino and correct_side != "F":
+                pd[turn].remove(chosen_domino)
+                update_table(table,correct_domino,correct_side)
+                turn = next_turn(turn)
+                count = 0
+            else:
+                print("Wrong move and side combination please try again: ")
         else: 
             print("Skipped turn of: ",pd[turn][0])
             turn = next_turn(turn)
