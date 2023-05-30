@@ -1,6 +1,6 @@
 import random
 
-
+## Self into all methods to be made accesible by other classes
 class Logic:
     # Builds the number of players list (Human Players & Computer players) total of 4
     def players(number_players):
