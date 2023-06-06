@@ -34,7 +34,7 @@ class Logic:
         return active_players
 
     """
-    For now the game will start with Player 1 and will progress towards the last player on the list and the loop again.
+    Things that need to be added:
     """
     def next_turn(turn):
         if turn < 3:
@@ -59,7 +59,7 @@ class Logic:
         return check
 
     # Check if the move made is a valid move via domino rules
-    def valid_move(table, chosen_domino, chosen_side):
+    """def valid_move(table, chosen_domino, chosen_side):
         if table == [] and chosen_domino == "F":
             return "F", "F"
         elif table == [] and chosen_domino != "F":
@@ -76,16 +76,17 @@ class Logic:
             return chosen_domino, chosen_side
         else:
             return "F", "F"
+    """
 
     # Making a move (Player Move)
     def make_move(player_dominos, current_turn, table):
         print("Current Table: \n", table)
         chosen_domino = input(f"Choose Domino (Ex. 1-2): {player_dominos[current_turn][1:]}\n")
-        chosen_side = input("Choose which side (L or R *Beginning does not Matter): \n")
-        chosen_side = chosen_side.capitalize()
+        #chosen_side = input("Choose which side (L or R *Beginning does not Matter): \n")
+        #chosen_side = chosen_side.capitalize()
         if (player_dominos[current_turn].count(chosen_domino) != 1):
             chosen_domino = "F"
-        return chosen_domino, chosen_side
+        return chosen_domino #chosen_side
 
     # Update the playing table with the most recent move
     def update_table(table, chosen_domino, chosen_side):
@@ -126,6 +127,43 @@ class Logic:
                 count = temp_count
         return count
 
+    """
+    Things needed to improve functionality of game
+    """
+    # Use def valid_move to improve the functionality
+    def valid_move2(table, chosen_domino):
+        # Two conditions: Play in both sides or Only one side
+        print(chosen_domino,"\n",table)
+        # Table is empty condition
+        if table == [] and chosen_domino == "F":
+            return chosen_domino, "F"
+        elif table == [] and chosen_domino != "F":
+            return chosen_domino, "L" 
+        # Play in both sides
+        elif chosen_domino[-1] == table[0][0] and chosen_domino[0] == table[-1][-1]:
+            chosen_side = input("Choose which side (L or R *Beginning does not Matter): \n")
+            return chosen_domino, chosen_side
+        elif chosen_domino[0] == table[0][0] and chosen_domino[-1] == table[-1][-1]:
+            chosen_domino = str(chosen_domino[-1]+"-"+chosen_domino[0])
+            chosen_side = input("Choose which side (L or R *Beginning does not Matter): \n")
+            return chosen_domino, chosen_side
+        # Can only be played on one side or both ends are the same
+        elif chosen_domino[-1] == table[0][0]:
+            return chosen_domino, "L"
+        elif chosen_domino[0] == table[0][0]:
+            chosen_domino = str(chosen_domino[-1]+"-"+chosen_domino[0])
+            return chosen_domino, "L"
+        elif chosen_domino[0] == table[-1][-1]:
+            return chosen_domino, "R"
+        elif chosen_domino[-1] == table[-1][-1]:
+            chosen_domino = str(chosen_domino[-1]+"-"+chosen_domino[0])
+            return chosen_domino, "R"
+        # In case none of the conditions are met
+        else:
+            return "F", "F"
+        
+    
+    
     # *Temporary game run
     table = []
     sp = build_pile()  # starting pile reference
@@ -148,9 +186,8 @@ class Logic:
             check_move = True
         if check_move and table == []:
             # Allow the user to choose the domino
-            chosen_domino, chosen_side = make_move(pd, turn, table)
-            correct_domino, correct_side = valid_move(
-                table, chosen_domino, chosen_side)  # Check if the move is valid
+            chosen_domino = make_move(pd, turn, table)
+            correct_domino, correct_side = valid_move2(table, chosen_domino)  # Check if the move is valid
             if correct_domino and correct_side != "F":  # If the move is valid perform block
                 # Remove domino the players hand
                 pd[turn].remove(chosen_domino)
@@ -163,9 +200,8 @@ class Logic:
                 print(f"Wrong move and side combination please try again: ")
         elif check_move:
             # Allow the user to choose the domino
-            chosen_domino, chosen_side = make_move(pd, turn, table)
-            correct_domino, correct_side = valid_move(
-                table, chosen_domino, chosen_side)  # Check if the move is valid
+            chosen_domino = make_move(pd, turn, table)
+            correct_domino, correct_side = valid_move2(table, chosen_domino)  # Check if the move is valid
             if correct_domino and correct_side != "F":  # If the move is valid perform block
                 # Remove domino the players hand
                 pd[turn].remove(chosen_domino)
@@ -189,4 +225,6 @@ class Logic:
             game_over = True
             winner = pd[turn][0]
     sc = score(pd,turn)
-    print(f"The winner is {winner} and got {sc} points")   
+    print(f"The winner is {winner} and got {sc} points")  
+    
+     
