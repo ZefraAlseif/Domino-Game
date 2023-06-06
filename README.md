@@ -32,14 +32,30 @@ Domino Game will allow players to play the board game of the same name: for this
 `def valid_move(table,chosen_domino,chosen_side):`
    - This function checks that the move that the individual played is a valid move
    - It does this by taking into account the chosen side and chosen domino match the table value
+`def score(player_dominos,turn):`
+   - This function takes the last turn and all of the remainding dominos
+   - It then removes the winning player from the list and adds up the points from each player
+`def check_winner(player_dominos):`
+   - This function activates when the game ends via the condition that no player can make a move
+   - The function takes all of the players and their corresponding dominos to perform a check to see which player has the least amount of points.
 
- # Things that need to be added:
-> (0) Match the dominos played i.e '2-3' '3-4' not '2-3' '4-3' [Completed]
+ # Things that need to be added: (Version 1)
+> Match the dominos played i.e '2-3' '3-4' not '2-3' '4-3' [Completed]
 
-> (1) Check if any of the dominos the current player has is playable [Completed]
+> Check if any of the dominos the current player has is playable [Completed]
 
-> (2) Check if the domino and side the player chose equate to a correct value [Completed]
+> Check if the domino and side the player chose equate to a correct value [Completed]
 
-> (3) End the game when no player has a domino to play or someone has ran out of dominos [Pending]
+> End the game when no player has a domino to play or someone has ran out of dominos [Completed]
+# Things needed to improve functionality of game (Version 2)
+> Add a function that determines where the domino the user chose has to be played. Hence no need to input the side that the user wants to play. However, when the domino can be played in both sides ask the user will be asked which side he would like to play [Completed]
+
+> Add an AI function in order to make sure that the computer is capable of making moves on its own. For this case only focus on adding the functionality, later will try to introduce machine learning to make the AI more formidable [Pending]
+
+> Introduce the ability to play until the winning player has reached a score of 100, this means that there must be a score keeper for each player in the game [Pending]
+
+> Introduce two game modes, solo play and team play. Solo play is the first iteration of the game and team play will allow for score to be shared between teams [Pending]
+
+
 
 
