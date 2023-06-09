@@ -19,8 +19,9 @@ Domino Game will allow players to play the board game of the same name: for this
 
 `def make_move(player_dominos,current_turn,table):`
    - It makes a move by first displaying the current table or status of the game
-   - It than displays the dominos available to the corresponding player and allows the player to choose which domino to play
-   - Lastly it removes the chosen domino from the list and returns the domino that was chosen and then location where the domino will be played
+   - It than displays the dominos available to the corresponding player 
+   - If the player is a human it allows the user to choose wich domino to play
+   - If the player is a Computer it chooses the first playable domino in the list
 
 `def update_table(table,chosen_domino,chosen_side):`
    - Updates the corresponding table or status of the game by inserting the chosen_domino in the side that it was chosen.
@@ -37,7 +38,7 @@ Domino Game will allow players to play the board game of the same name: for this
    - This function takes the last turn and all of the remainding dominos
    - It then removes the winning player from the list and adds up the points from each player
 
-`def check_winner(player_dominos):`
+`def check_winner(player_dominos):` 
    - This function activates when the game ends via the condition that no player can make a move
    - The function takes all of the players and their corresponding dominos to perform a check to see which player has the least amount of points.
 
@@ -58,7 +59,7 @@ Domino Game will allow players to play the board game of the same name: for this
 
 > Add an AI function in order to make sure that the computer is capable of making moves on its own. For this case only focus on adding the functionality, later will try to introduce machine learning to make the AI more formidable [Completed]
 
-> Introduce the ability to play until the winning player has reached a score of 100, this means that there must be a score keeper for each player in the game [Pending]
+> Introduce the ability to play until the winning player has reached a score of 100, this means that there must be a score keeper for each player in the game [Completed]
 
 > Introduce two game modes, solo play and team play. Solo play is the first iteration of the game and team play will allow for score to be shared between teams [Pending]
 

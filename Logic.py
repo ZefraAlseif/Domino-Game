@@ -25,12 +25,6 @@ class Logic:
             for j in range(0, 10):
                 temp_domino = start_pile.pop()
                 i.append(temp_domino)
-        """dict_players = {
-            active_players[0][0]: active_players[0][1:],
-            active_players[1][0]: active_players[1][1:],
-            active_players[2][0]: active_players[2][1:],
-            active_players[3][0]: active_players[3][1:],
-        }"""
         return active_players
 
     """
@@ -92,7 +86,10 @@ class Logic:
                 #print("Temp Domino: "+temp_domino)
                 #print("Table lft: "+table_lft[0])
                 #print("Table right: "+table_rht[-1])
-                if (temp_domino.find(table[0][0]) != -1 or temp_domino.find(table[-1][-1]) != -1):
+                if table == []:
+                    chosen_domino = temp_domino
+                    break
+                elif (temp_domino.find(table[0][0]) != -1 or temp_domino.find(table[-1][-1]) != -1):
                     chosen_domino = temp_domino
                     break
         if (player_dominos[current_turn].count(chosen_domino) != 1):
@@ -153,6 +150,7 @@ class Logic:
         elif chosen_domino[-1] == table[0][0] and chosen_domino[0] == table[-1][-1]:
             if player != (f"Computer Player {player[-1]}"):
                 chosen_side = input("Choose which side (L or R *Beginning does not Matter): \n")
+                chosen_side = chosen_side.capitalize()
                 return chosen_domino, chosen_side
             else:
                 print("Test Achieved")
@@ -183,12 +181,17 @@ class Logic:
             return "F", "F"  
     
     # *Temporary game run
-    table = []
-    sp = build_pile()  # starting pile reference
+    
+    #table = []
+    #sp = build_pile()  # starting pile reference
     # print(sp)
-    ap = players(2)#random.randint(2, 4))  # active player reference
-    # print(ap)
-    pd = pick_dominos(sp, ap)  # each player dominos reference
+    ap = players(2) #random.randint(2, 4))  # active player reference
+    player_scores= {f"{ap[0][0]} score":0,
+                    f"{ap[1][0]} score":0,
+                    f"{ap[2][0]} score":0,
+                    f"{ap[3][0]} score":0,}
+    print(player_scores)
+    #pd = pick_dominos(sp, ap)  # each player dominos reference
     turn = 0  # Starting player turn
     # print(pd)
     count = 0  # Determine how many players where skipped
@@ -196,53 +199,66 @@ class Logic:
     winner = ""  # Stores the player that has Won
     sc = 0  # How many points does the winning player obtain
     # (count < 4 or (len(pd[0]) or len(pd[1]) or len(pd[2]) or len(pd[3])) == 1):
-    while (game_over == False):
-        if table != []:  # Check if the game is not at the starting position
-            # Check if the player can make a move
-            check_move = can_move(pd, turn, table)
-        else:
-            check_move = True
-        if check_move and table == []:
-            # Allow the user to choose the domino
-            chosen_domino = make_move(pd, turn, table)
-            correct_domino, correct_side = valid_move2(table, chosen_domino,pd[turn][0])  # Check if the move is valid
-            if correct_domino and correct_side != "F":  # If the move is valid perform block
-                # Remove domino the players hand
-                pd[turn].remove(chosen_domino)
-                # Update the table
-                update_table(table, correct_domino, correct_side)
-                turn = next_turn(turn)  # Go to the next turn
-                count = 0  # Counter of people skipped
+    winner = ap[3][0]
+    while(player_scores[f"{winner} score"] < 100):
+        table = []
+        ap = players(2)
+        sp = build_pile()  # starting pile reference
+        pd = pick_dominos(sp, ap)  # each player dominos reference
+        game_over = False  # Determines when the game ends
+        winner = ""  # Stores the player that has Won
+        sc = 0  # How many points does the winning player obtain
+        count = 0
+        while (game_over == False):
+            if table != []:  # Check if the game is not at the starting position
+                # Check if the player can make a move
+                check_move = can_move(pd, turn, table)
             else:
-                # Invalid move was made
-                print(f"Wrong move and side combination please try again: ")
-        elif check_move:
-            # Allow the user to choose the domino
-            chosen_domino = make_move(pd, turn, table)
-            correct_domino, correct_side = valid_move2(table, chosen_domino,pd[turn][0])  # Check if the move is valid
-            if correct_domino and correct_side != "F":  # If the move is valid perform block
-                # Remove domino the players hand
-                pd[turn].remove(chosen_domino)
-                # Update the table
-                update_table(table, correct_domino, correct_side)
-                turn = next_turn(turn)  # Go to the next turn
-                count = 0  # Counter of people skipped
+                check_move = True
+            if check_move and table == []:
+                # Allow the user to choose the domino
+                chosen_domino = make_move(pd, turn, table)
+                correct_domino, correct_side = valid_move2(table, chosen_domino,pd[turn][0])  # Check if the move is valid
+                if correct_domino and correct_side != "F":  # If the move is valid perform block
+                    # Remove domino the players hand
+                    pd[turn].remove(chosen_domino)
+                    # Update the table
+                    update_table(table, correct_domino, correct_side)
+                    turn = next_turn(turn)  # Go to the next turn
+                    count = 0  # Counter of people skipped
+                else:
+                    # Invalid move was made
+                    print(f"Wrong move and side combination please try again: ")
+            elif check_move:
+                # Allow the user to choose the domino
+                chosen_domino = make_move(pd, turn, table)
+                correct_domino, correct_side = valid_move2(table, chosen_domino,pd[turn][0])  # Check if the move is valid
+                if correct_domino and correct_side != "F":  # If the move is valid perform block
+                    # Remove domino the players hand
+                    pd[turn].remove(chosen_domino)
+                    # Update the table
+                    update_table(table, correct_domino, correct_side)
+                    turn = next_turn(turn)  # Go to the next turn
+                    count = 0  # Counter of people skipped
+                else:
+                    # Invalid move was made
+                    print(f"Wrong move and side combination please try again: ")
             else:
-                # Invalid move was made
-                print(f"Wrong move and side combination please try again: ")
-        else:
-            print("Skipped turn of: ", pd[turn][0])
-            turn = next_turn(turn)
-            count += 1
-        if (count == 4):  # Checks the condition that the count is equal to 4 and ends the game
-            game_over = True
-            turn = check_winner(pd)
-            winner = pd[turn][0]
-        # Checks the condition that a player does not have any more pieces
-        elif (pd[turn][-1] == pd[turn][0]):
-            game_over = True
-            winner = pd[turn][0]
-    sc = score(pd,turn)
-    print(f"The winner is {winner} and got {sc} points")  
+                print("Skipped turn of: ", pd[turn][0])
+                turn = next_turn(turn)
+                count += 1
+            if (count == 4):  # Checks the condition that the count is equal to 4 and ends the game
+                game_over = True
+                turn = check_winner(pd)
+                winner = pd[turn][0]
+            # Checks the condition that a player does not have any more pieces
+            elif (pd[turn][-1] == pd[turn][0]):
+                game_over = True
+                winner = pd[turn][0]
+        sc = score(pd,turn) / 2
+        player_scores[f"{winner} score"] += int(sc) 
+        print(player_scores)
+        print(f"The winner is {winner} and got {sc} points")
+        print("Turn: ",turn)  
     
      
